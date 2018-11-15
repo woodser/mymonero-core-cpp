@@ -42,7 +42,7 @@ A primary goal for this repository is its future convergence and reimplementatio
 * `monero-core-custom` (see "Setup")
 
 
-## Setup
+## Setup 
 
 * Run `bin/update_submodules` 
 
