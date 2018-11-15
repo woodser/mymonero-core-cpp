@@ -740,46 +740,6 @@ string serial_bridge::derive_public_key(const string &args_string)
 	return ret_json_from_root(root);
 }
 
-string serial_bridge::json_to_binary(const std::string &buff_json) {
-
-	// convert json to binary string
-	string buff_bin;
-	crypto::json_to_binary(buff_json, buff_bin);
-
-	// copy binary string to heap and keep pointer
-	std::string* ptr = new std::string(buff_bin.c_str(), buff_bin.length());
-
-	// create object with binary string memory address info
-	boost::property_tree::ptree root;
-	root.put("ptr", reinterpret_cast<intptr_t>(ptr->c_str()));
-	root.put("length", ptr->length());
-
-	// serlialize memory info to json str
-	return ret_json_from_root(root);
-}
-
-string serial_bridge::binary_to_json(const std::string &bin_mem_info_str) {
-
-	// parse json
-	boost::property_tree::ptree root;
-	if (!parsed_json_root(bin_mem_info_str, root)) {
-		// it will already have thrown an exception
-		return error_ret_json_from_message("Invalid JSON");
-	}
-
-	// get ptr and length of binary data
-	char* ptr = (char*) root.get<int>("ptr");	// TODO: reinterpret_cast<intptr_t>?
-	int length = root.get<int>("length");
-
-	// read binary
-	std::string buff_bin(ptr, length);
-
-	// convert binary to json and return
-	std::string buff_json;
-	crypto::binary_to_json(buff_bin, buff_json);
-	return buff_json;
-}
-
 string serial_bridge::derive_subaddress_public_key(const string &args_string)
 {
 	boost::property_tree::ptree json_root;
@@ -804,4 +764,44 @@ string serial_bridge::derive_subaddress_public_key(const string &args_string)
 	root.put(ret_json_key__generic_retVal(), epee::string_tools::pod_to_hex(derived_key));
 	//
 	return ret_json_from_root(root);
+}
+
+string serial_bridge::malloc_binary_from_json(const std::string &buff_json) {
+
+	// convert json to binary string
+	string buff_bin;
+	crypto::json_to_binary(buff_json, buff_bin);
+
+	// copy binary string to heap and keep pointer
+	std::string* ptr = new std::string(buff_bin.c_str(), buff_bin.length());
+
+	// create object with binary string memory address info
+	boost::property_tree::ptree root;
+	root.put("ptr", reinterpret_cast<intptr_t>(ptr->c_str()));
+	root.put("length", ptr->length());
+
+	// serlialize memory info to json str
+	return ret_json_from_root(root);
+}
+
+string serial_bridge::binary_to_json(const std::string &bin_mem_info_str) {
+
+	// parse memory address info to json
+	boost::property_tree::ptree root;
+	if (!parsed_json_root(bin_mem_info_str, root)) {
+		// it will already have thrown an exception
+		return error_ret_json_from_message("Invalid JSON");
+	}
+
+	// get ptr and length of binary data
+	char* ptr = (char*) root.get<int>("ptr");	// TODO: reinterpret_cast<intptr_t>?
+	int length = root.get<int>("length");
+
+	// read binary
+	std::string buff_bin(ptr, length);
+
+	// convert binary to json and return
+	std::string buff_json;
+	crypto::binary_to_json(buff_bin, buff_json);
+	return buff_json;
 }
