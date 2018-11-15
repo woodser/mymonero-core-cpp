@@ -741,98 +741,43 @@ string serial_bridge::derive_public_key(const string &args_string)
 }
 
 string serial_bridge::json_to_binary(const std::string &buff_json) {
-	//std::string buff_bin;
+
+	// convert json to binary string
 	string buff_bin;
 	crypto::json_to_binary(buff_json, buff_bin);
-	cout << "Buff bin length: " << buff_bin.length() << "\n";
 
-	// copy binary string into the heap and keep pointer
-	std::string* myString = new std::string(buff_bin.c_str(), buff_bin.length());
+	// copy binary string to heap and keep pointer
+	std::string* ptr = new std::string(buff_bin.c_str(), buff_bin.length());
 
-	//buff_bin = *new string("Hello there!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1189");	// mess up if greater than 47 characters
-	//buff_bin = *new string("Hello there!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1189");	// mess up unless one '!' removed
-	//buff_bin = *new string("Hello there! Hello there! Hello there! Hello the");	// mess up unless one '!' removed
-
-	//buff_bin = *new string("Hello there!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1189");	// mess up
-	//buff_bin = *new string("Hello there my good man can we please exceed a limit so as to mess\n\rup this process!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1189");	// mess up
-	//buff_bin = *new string(buff_bin.c_str(), buff_bin.length());
-	std::cout << "serial_bridge::json_to_binary(): " << myString[0] << "\n";
+	// create object with binary string memory address info
 	boost::property_tree::ptree root;
-	root.put("ptr", reinterpret_cast<intptr_t>(myString->c_str()));
-	//root.put("ptr", (int) buff_bin.c_str());
-	root.put("length", myString->length());
+	root.put("ptr", reinterpret_cast<intptr_t>(ptr->c_str()));
+	root.put("length", ptr->length());
 
-	cout << "Address info: " << ret_json_from_root(root) << "\n";
-
-	cout << "Lets iterate character by character...\n";
-	for (int i = 0; i < myString->length(); i++) {
-		cout << myString->at(i);
-	}
-	cout << "\n";
-
+	// serlialize memory info to json str
 	return ret_json_from_root(root);
 }
 
 string serial_bridge::binary_to_json(const std::string &bin_mem_info_str) {
-	std::cout << "serial_bridge::binary_to_json(): " << bin_mem_info_str << "\n";
-	boost::property_tree::ptree json_root;
-	if (!parsed_json_root(bin_mem_info_str, json_root)) {
+
+	// parse json
+	boost::property_tree::ptree root;
+	if (!parsed_json_root(bin_mem_info_str, root)) {
 		// it will already have thrown an exception
 		return error_ret_json_from_message("Invalid JSON");
 	}
 
-	char* ptr = (char*) json_root.get<int>("ptr");
-	int length = json_root.get<int>("length");
+	// get ptr and length of binary data
+	char* ptr = (char*) root.get<int>("ptr");	// TODO: reinterpret_cast<intptr_t>?
+	int length = root.get<int>("length");
 
-	//cout << "Serial bridge binary pointer: " << &ptr[0] << "\n";
-	cout << "Serial bridge binary length: " << length << "\n";
-
-
-
-//	cout << address[0] << "\n";
-
-//	cout << "Lets print this character by character\n";
-//	for (int i = 0; i < length; i++) {
-//		cout << address[i];
-//	}
-//	cout << "\n";
-
-//	std::string ret(buffer, bufflen);
-//
-//	    return ret;
-
-
+	// read binary
 	std::string buff_bin(ptr, length);
-	cout << "Retrieved binary: \n";
-	cout << buff_bin << "\n";
 
-	cout << "Lets iterate character by character...\n";
-	for (int i = 0; i < length; i++) {
-		cout << buff_bin.at(i);
-	}
-	cout << "\n";
-
-
-
+	// convert binary to json and return
 	std::string buff_json;
 	crypto::binary_to_json(buff_bin, buff_json);
-	cout << "Dumped JSON :" << buff_json << "\n";
 	return buff_json;
-
-//	char* c = (char*) json_root.get<int>("address");
-//	for (int i = 0; i < length; i++) {
-//		cout << c[i];
-//	}
-//	cout << "\n";
-
-
-//	std::string buff_json;
-//	crypto::binary_to_json(buff_bin, buff_json);
-//	return "Not implemented";
-//	boost::property_tree::ptree root;
-//	root.put(ret_json_key__generic_retVal(), buff_json);
-//	//
-//	return ret_json_from_root(root);
 }
 
 string serial_bridge::derive_subaddress_public_key(const string &args_string)
