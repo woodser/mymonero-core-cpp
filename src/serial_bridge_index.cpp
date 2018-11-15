@@ -805,3 +805,25 @@ string serial_bridge::binary_to_json(const std::string &bin_mem_info_str) {
 	crypto::binary_to_json(buff_bin, buff_json);
 	return buff_json;
 }
+
+string serial_bridge::binary_blocks_to_json(const std::string &bin_mem_info_str) {
+
+	// parse memory address info to json
+	boost::property_tree::ptree root;
+	if (!parsed_json_root(bin_mem_info_str, root)) {
+		// it will already have thrown an exception
+		return error_ret_json_from_message("Invalid JSON");
+	}
+
+	// get ptr and length of binary data
+	char* ptr = (char*) root.get<int>("ptr");	// TODO: reinterpret_cast<intptr_t>?
+	int length = root.get<int>("length");
+
+	// read binary
+	std::string buff_bin(ptr, length);
+
+	// convert binary to json and return
+	std::string buff_json;
+	crypto::binary_blocks_to_json(buff_bin, buff_json);
+	return buff_json;
+}

@@ -70,6 +70,7 @@ namespace serial_bridge
 	//
 	string malloc_binary_from_json(const string &args_string);
 	string binary_to_json(const string &args_string);
+	string binary_blocks_to_json(const string &args_string);
 	//
 	// JSON values
 	network_type nettype_from_string(const string &nettype_string);
