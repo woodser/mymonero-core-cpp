@@ -953,6 +953,15 @@ BOOST_AUTO_TEST_CASE(bridged__derive_public_key)
 	BOOST_REQUIRE(*str == "da26518ddb54cde24ccfc59f36df13bbe9bdfcb4ef1b223d9ab7bef0a50c8be3");
 	cout << "bridged__derive_public_key: " << *str << endl;
 }
+//
+// TODO: implement tests for json_to_binary and binary_to_json
+BOOST_AUTO_TEST_CASE(bridged__json_to_binary)
+{
+	using namespace serial_bridge;
+	//
+	cout << "Boost test for json_to_binary not implemented\n";
+	BOOST_REQUIRE(false);
+}
 BOOST_AUTO_TEST_CASE(bridged__derive_subaddress_public_key)
 {
 	using namespace serial_bridge;

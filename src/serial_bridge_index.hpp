@@ -65,6 +65,8 @@ namespace serial_bridge
 	//
 	string generate_key_derivation(const string &args_string);
 	string derive_public_key(const string &args_string);
+	string json_to_binary(const string &args_string);
+	string binary_to_json(const string &args_string);
 	string derive_subaddress_public_key(const string &args_string);
 	string decodeRct(const string &args_string);
 	//
