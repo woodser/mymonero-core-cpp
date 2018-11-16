@@ -42,6 +42,7 @@
 #include "monero_paymentID_utils.hpp"
 #include "monero_wallet_utils.hpp"
 #include "monero_key_image_utils.hpp"
+#include "monero_binary_utils.hpp"
 #include "wallet_errors.h"
 #include "string_tools.h"
 #include "ringct/rctSigs.h"
@@ -52,6 +53,7 @@ using namespace boost;
 using namespace cryptonote;
 using namespace monero_transfer_utils;
 using namespace monero_fork_rules;
+using namespace binary_utils;
 //
 using namespace serial_bridge;
 //
@@ -767,10 +769,9 @@ string serial_bridge::derive_subaddress_public_key(const string &args_string)
 }
 
 string serial_bridge::malloc_binary_from_json(const std::string &buff_json) {
-
 	// convert json to binary string
 	string buff_bin;
-	crypto::json_to_binary(buff_json, buff_bin);
+	binary_utils::json_to_binary(buff_json, buff_bin);
 
 	// copy binary string to heap and keep pointer
 	std::string* ptr = new std::string(buff_bin.c_str(), buff_bin.length());
@@ -785,7 +786,6 @@ string serial_bridge::malloc_binary_from_json(const std::string &buff_json) {
 }
 
 string serial_bridge::binary_to_json(const std::string &bin_mem_info_str) {
-
 	// parse memory address info to json
 	boost::property_tree::ptree root;
 	if (!parsed_json_root(bin_mem_info_str, root)) {
@@ -802,12 +802,11 @@ string serial_bridge::binary_to_json(const std::string &bin_mem_info_str) {
 
 	// convert binary to json and return
 	std::string buff_json;
-	crypto::binary_to_json(buff_bin, buff_json);
+	binary_utils::binary_to_json(buff_bin, buff_json);
 	return buff_json;
 }
 
 string serial_bridge::binary_blocks_to_json(const std::string &bin_mem_info_str) {
-
 	// parse memory address info to json
 	boost::property_tree::ptree root;
 	if (!parsed_json_root(bin_mem_info_str, root)) {
@@ -824,6 +823,6 @@ string serial_bridge::binary_blocks_to_json(const std::string &bin_mem_info_str)
 
 	// convert binary to json and return
 	std::string buff_json;
-	crypto::binary_blocks_to_json(buff_bin, buff_json);
+	binary_utils::binary_blocks_to_json(buff_bin, buff_json);
 	return buff_json;
 }
