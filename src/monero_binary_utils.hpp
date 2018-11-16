@@ -14,22 +14,6 @@ namespace binary_utils
   using namespace boost;
   using namespace cryptonote;
 
-//  /**
-//   * Used to serialize blocks and transactions to JSON.
-//   */
-//  struct GET_BLOCKS_BY_HEIGHT_JSON {
-//    std::vector<block> blocks;
-//    std::vector<std::vector<transaction>> txs;
-//    std::string status;
-//    bool untrusted;
-//
-//    BEGIN_KV_SERIALIZE_MAP()
-//      KV_SERIALIZE(blocks)
-//      KV_SERIALIZE(status)
-//      KV_SERIALIZE(untrusted)
-//    END_KV_SERIALIZE_MAP()
-//  };
-
   /**
    * TODO.
    */
