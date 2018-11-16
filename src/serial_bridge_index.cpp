@@ -768,7 +768,8 @@ string serial_bridge::derive_subaddress_public_key(const string &args_string)
 	return ret_json_from_root(root);
 }
 
-string serial_bridge::malloc_binary_from_json(const std::string &buff_json) {
+string serial_bridge::malloc_binary_from_json(const std::string &buff_json)
+{
 	// convert json to binary string
 	string buff_bin;
 	binary_utils::json_to_binary(buff_json, buff_bin);
@@ -785,7 +786,8 @@ string serial_bridge::malloc_binary_from_json(const std::string &buff_json) {
 	return ret_json_from_root(root);
 }
 
-string serial_bridge::binary_to_json(const std::string &bin_mem_info_str) {
+string serial_bridge::binary_to_json(const std::string &bin_mem_info_str)
+{
 	// parse memory address info to json
 	boost::property_tree::ptree root;
 	if (!parsed_json_root(bin_mem_info_str, root)) {
@@ -806,7 +808,8 @@ string serial_bridge::binary_to_json(const std::string &bin_mem_info_str) {
 	return buff_json;
 }
 
-string serial_bridge::binary_blocks_to_json(const std::string &bin_mem_info_str) {
+string serial_bridge::binary_blocks_to_json(const std::string &bin_mem_info_str)
+{
 	// parse memory address info to json
 	boost::property_tree::ptree root;
 	if (!parsed_json_root(bin_mem_info_str, root)) {
