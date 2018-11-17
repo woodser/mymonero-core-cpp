@@ -48,7 +48,6 @@ void binary_utils::binary_blocks_to_json(const std::string &buff_bin, std::strin
 
       // parse and validate txs
       boost::property_tree::ptree txsNode;
-      txsNodes.push_back(std::make_pair("", txsNode));	// array of array of transactions, one array per block
       for (int txIdx = 0; txIdx < resp_struct.blocks[blockIdx].txs.size(); txIdx++) {
 	  cryptonote::transaction tx;
 	  if (cryptonote::parse_and_validate_tx_from_blob(resp_struct.blocks[blockIdx].txs[txIdx], tx)) {
@@ -61,6 +60,7 @@ void binary_utils::binary_blocks_to_json(const std::string &buff_bin, std::strin
 	      throw std::runtime_error("failed to parse tx blob at index " + std::to_string(txIdx));
 	  }
       }
+      txsNodes.push_back(std::make_pair("", txsNode));	// array of array of transactions, one array per block
   }
   root.add_child("blocks", blocksNode);
   root.add_child("txs", txsNodes);
