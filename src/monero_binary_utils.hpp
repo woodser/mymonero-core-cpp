@@ -28,5 +28,20 @@ namespace binary_utils
    * TODO.
    */
   void binary_blocks_to_json(const std::string &buff_bin, std::string &buff_json);
+
+  /**
+   * TODO.
+   */
+  struct blocks_resp
+  {
+    std::vector<cryptonote::block> blocks;
+    std::vector<std::vector<cryptonote::transaction>> txs;
+
+    BEGIN_SERIALIZE_OBJECT()
+      FIELD(blocks)
+      FIELD(txs)
+    END_SERIALIZE()
+  };
 }
+
 #endif /* monero_binary_utils_hpp */
