@@ -54,7 +54,8 @@ void binary_utils::binary_blocks_to_json(const std::string &buff_bin, std::strin
 
 	      // add tx node to txs node
 	      boost::property_tree::ptree txNode;
-	      txNode.put("", cryptonote::obj_to_json_str(tx));	// TODO: no pretty print
+	      //std::cout << "PRUNED:\n" << binary_utils::get_pruned_tx_json(tx) << "\n";
+	      txNode.put("", binary_utils::get_pruned_tx_json(tx));	// TODO: no pretty print
 	      txsNode.push_back(std::make_pair("", txNode));
 	  } else {
 	      throw std::runtime_error("failed to parse tx blob at index " + std::to_string(txIdx));

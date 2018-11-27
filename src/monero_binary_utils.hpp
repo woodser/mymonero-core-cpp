@@ -28,5 +28,17 @@ namespace binary_utils
    * TODO.
    */
   void binary_blocks_to_json(const std::string &buff_bin, std::string &buff_json);
+
+  /**
+   * Modified from core_rpc_server.cpp to return a string.
+   */
+  static std::string get_pruned_tx_json(cryptonote::transaction &tx)
+  {
+    std::stringstream ss;
+    json_archive<true> ar(ss);
+    bool r = tx.serialize_base(ar);
+    CHECK_AND_ASSERT_MES(r, std::string(), "Failed to serialize rct signatures base");
+    return ss.str();
+  }
 }
 #endif /* monero_binary_utils_hpp */
