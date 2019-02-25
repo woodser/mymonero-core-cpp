@@ -75,6 +75,10 @@ namespace serial_bridge
 	string decodeRct(const string &args_string);
 	string decodeRctSimple(const string &args_string);
 	string encrypt_payment_id(const string &args_string);
+	//
+	string malloc_binary_from_json(const string &args_string);
+	string binary_to_json(const string &args_string);
+	string binary_blocks_to_json(const string &args_string);
 }
 
 #endif /* serial_bridge_index_hpp */
