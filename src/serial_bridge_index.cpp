@@ -42,6 +42,7 @@
 #include "monero_paymentID_utils.hpp"
 #include "monero_wallet_utils.hpp"
 #include "monero_key_image_utils.hpp"
+#include "monero_binary_utils.hpp"
 #include "wallet_errors.h"
 #include "string_tools.h"
 #include "ringct/rctSigs.h"
@@ -53,6 +54,7 @@ using namespace boost;
 using namespace cryptonote;
 using namespace monero_transfer_utils;
 using namespace monero_fork_rules;
+using namespace binary_utils;
 //
 using namespace serial_bridge;
 using namespace serial_bridge_utils;
@@ -812,4 +814,63 @@ string serial_bridge::encrypt_payment_id(const string &args_string)
 	boost::property_tree::ptree root;
 	root.put(ret_json_key__generic_retVal(), epee::string_tools::pod_to_hex(payment_id));
 	return ret_json_from_root(root);
+}
+string serial_bridge::malloc_binary_from_json(const std::string &buff_json)
+{
+	// convert json to binary string
+	string buff_bin;
+	binary_utils::json_to_binary(buff_json, buff_bin);
+
+	// copy binary string to heap and keep pointer
+	std::string* ptr = new std::string(buff_bin.c_str(), buff_bin.length());
+
+	// create object with binary string memory address info
+	boost::property_tree::ptree root;
+	root.put("ptr", reinterpret_cast<intptr_t>(ptr->c_str()));
+	root.put("length", ptr->length());
+
+	// serlialize memory info to json str
+	return ret_json_from_root(root);
+}
+string serial_bridge::binary_to_json(const std::string &bin_mem_info_str)
+{
+	// parse memory address info to json
+	boost::property_tree::ptree root;
+	if (!parsed_json_root(bin_mem_info_str, root)) {
+		// it will already have thrown an exception
+		return error_ret_json_from_message("Invalid JSON");
+	}
+
+	// get ptr and length of binary data
+	char* ptr = (char*) root.get<int>("ptr");	// TODO: reinterpret_cast<intptr_t>?
+	int length = root.get<int>("length");
+
+	// read binary
+	std::string buff_bin(ptr, length);
+
+	// convert binary to json and return
+	std::string buff_json;
+	binary_utils::binary_to_json(buff_bin, buff_json);
+	return buff_json;
+}
+string serial_bridge::binary_blocks_to_json(const std::string &bin_mem_info_str)
+{
+	// parse memory address info to json
+	boost::property_tree::ptree root;
+	if (!parsed_json_root(bin_mem_info_str, root)) {
+		// it will already have thrown an exception
+		return error_ret_json_from_message("Invalid JSON");
+	}
+
+	// get ptr and length of binary data
+	char* ptr = (char*) root.get<int>("ptr");	// TODO: reinterpret_cast<intptr_t>?
+	int length = root.get<int>("length");
+
+	// read binary
+	std::string buff_bin(ptr, length);
+
+	// convert binary to json and return
+	std::string buff_json;
+	binary_utils::binary_blocks_to_json(buff_bin, buff_json);
+	return buff_json;
 }
