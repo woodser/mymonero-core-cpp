@@ -137,3 +137,13 @@ foreach(testSrc ${TEST_SRCS})
         COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/build/products/${testName} --catch_system_error=yes
     )
 endforeach(testSrc)
+
+########################
+# Build library
+########################
+
+add_library(libmymonero-core-cpp SHARED ${SRC_FILES})
+
+target_link_libraries(libmymonero-core-cpp
+	# add dependent libraries here
+)
