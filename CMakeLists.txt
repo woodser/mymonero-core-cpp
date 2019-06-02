@@ -42,6 +42,8 @@ set(
     #
     src/monero_address_utils.hpp
     src/monero_address_utils.cpp
+    src/monero_binary_utils.hpp
+    src/monero_binary_utils.cpp
     src/monero_paymentID_utils.hpp
     src/monero_paymentID_utils.cpp
     src/monero_key_image_utils.hpp
